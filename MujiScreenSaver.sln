@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MujiScreenSaver", "src\MujiScreenSaver\MujiScreenSaver.csproj", "{8A6FE552-D9B9-45CB-9F42-81E4C3C20A3A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MujiScreenSaver.Tests", "tests\MujiScreenSaver.Tests\MujiScreenSaver.Tests.csproj", "{5F790D0B-7B63-423B-A4C7-67F97B81E7C6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8A6FE552-D9B9-45CB-9F42-81E4C3C20A3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A6FE552-D9B9-45CB-9F42-81E4C3C20A3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A6FE552-D9B9-45CB-9F42-81E4C3C20A3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A6FE552-D9B9-45CB-9F42-81E4C3C20A3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F790D0B-7B63-423B-A4C7-67F97B81E7C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F790D0B-7B63-423B-A4C7-67F97B81E7C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F790D0B-7B63-423B-A4C7-67F97B81E7C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F790D0B-7B63-423B-A4C7-67F97B81E7C6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
