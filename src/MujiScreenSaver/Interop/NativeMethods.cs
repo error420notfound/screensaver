@@ -80,9 +80,18 @@ public static class NativeMethods
 
     private static double GetMonitorScale(IntPtr monitor)
     {
-        if (monitor != IntPtr.Zero && GetDpiForMonitor(monitor, MonitorDpiType.EffectiveDpi, out var dpiX, out _) == 0 && dpiX > 0)
+        try
         {
-            return dpiX / 96.0;
+            if (monitor != IntPtr.Zero && GetDpiForMonitor(monitor, MonitorDpiType.EffectiveDpi, out var dpiX, out _) == 0 && dpiX > 0)
+            {
+                return dpiX / 96.0;
+            }
+        }
+        catch (DllNotFoundException)
+        {
+        }
+        catch (EntryPointNotFoundException)
+        {
         }
 
         return 1.0;

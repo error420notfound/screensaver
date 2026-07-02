@@ -13,6 +13,7 @@ public static class Program
         {
             ShutdownMode = ShutdownMode.OnExplicitShutdown
         };
+        app.InitializeComponent();
 
         try
         {

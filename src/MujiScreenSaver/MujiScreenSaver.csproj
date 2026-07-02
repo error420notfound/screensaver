@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <StartupObject>MujiScreenSaver.Program</StartupObject>
     <AssemblyName>MujiScreenSaver</AssemblyName>
     <RootNamespace>MujiScreenSaver</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
