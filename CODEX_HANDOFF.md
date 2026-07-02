@@ -111,17 +111,11 @@ Design tokens:
 
 Keep the design sparse. Do not add cards, shadows, glass, gradients, icons, dense panels, or decorative animation.
 
-## Known Validation Gap
+## Windows Validation
 
-The previous implementation environment was macOS and did not have `dotnet`, `msbuild`, or `pwsh` available. Static checks were done, but the project has not yet been compiled or run on Windows in this chat.
+Validated on Windows 10 with .NET SDK `10.0.301` building the `net8.0-windows` WPF project.
 
 Completed checks:
-
-- `git diff --check`
-- XML/XAML well-formedness via `xmllint`
-- Source scans for unsupported or unwanted technology
-
-Required next validation on Windows:
 
 ```powershell
 dotnet restore
@@ -131,34 +125,36 @@ dotnet test
 .\build\install-current-user.ps1
 ```
 
+Results:
+
+- Restore succeeded.
+- Release build succeeded with 0 warnings and 0 errors.
+- Tests passed: 15/15.
+- `build\publish-scr.ps1` produced `%LOCALAPPDATA%\MujiScreenSaver\App\MujiScreenSaver.scr` beside `.dll`, `.deps.json`, and `.runtimeconfig.json`.
+- `build\install-current-user.ps1` set `HKCU\Control Panel\Desktop\SCRNSAVE.EXE` and `ScreenSaveActive`.
+- `build\uninstall-current-user.ps1` removed the registration, then install was run again to leave the current user registered.
+- Smoke launch `/c`: process remained running after 3 seconds.
+- Smoke launch `/s`: process remained running after 3 seconds.
+- Smoke launch `/p <HWND>`: process remained running after 3 seconds using a temporary Windows Forms host panel HWND.
+
+Fixes made during validation:
+
+- Added explicit `System.IO` and `System.Threading` imports in `TimerStore.cs` for WPF generated-project compilation.
+- Hardened `build\publish-scr.ps1` so it resolves `dotnet` from PATH or standard Program Files install locations, quotes paths with spaces, and throws on publish failures.
+
 ## Suggested Next Work
 
-1. Build on Windows and fix compile errors.
-2. Run unit tests and fix failing tests.
-3. Launch config mode:
-
-   ```powershell
-   .\MujiScreenSaver.scr /c
-   ```
-
-4. Launch full-screen mode:
-
-   ```powershell
-   .\MujiScreenSaver.scr /s
-   ```
-
-5. Register and test Windows Screen Saver Settings preview mode.
-6. Validate multi-monitor behavior on real or virtual multi-display Windows setup.
-7. Validate mixed-DPI behavior.
-8. Tune the WPF visual layout after seeing it on 1080p and 4K displays.
+1. Validate preview mode inside the official Windows Screen Saver Settings UI.
+2. Validate multi-monitor behavior on real or virtual multi-display Windows setup.
+3. Validate mixed-DPI behavior.
+4. Tune the WPF visual layout after seeing it on 1080p and 4K displays.
 
 ## Technical Risks To Check First
 
-- WPF custom entry point may need generated `App.g.cs` entry-point suppression/coordination.
-- `/p` preview mode is the highest-risk area because it depends on native HWND child hosting.
+- `/p` preview mode is the highest-risk area because it depends on native HWND child hosting; a temporary HWND smoke test passes, but the official Settings preview still needs a visual pass.
 - Full-screen focus-loss exit must not self-trigger across multiple screensaver windows.
 - DPI conversion in monitor bounds may need adjustment after real Windows testing.
-- Framework-dependent `.scr` packaging must keep `.dll`, `.deps.json`, and `.runtimeconfig.json` next to the renamed `.scr`.
+- Framework-dependent `.scr` packaging must keep `.dll`, `.deps.json`, and `.runtimeconfig.json` next to the renamed `.scr`; this is now verified by publish output.
 
 ## Original Implementation Plan
 

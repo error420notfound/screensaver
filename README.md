@@ -23,6 +23,8 @@ dotnet test
 .\build\publish-scr.ps1
 ```
 
+`publish-scr.ps1` uses `dotnet` from `PATH` when available, then falls back to the standard `Program Files\dotnet\dotnet.exe` install locations.
+
 The publish script copies the framework-dependent app to:
 
 ```text
@@ -57,3 +59,5 @@ The file is written atomically through a temporary file and normalized on load. 
 ## Notes
 
 This project targets `net8.0-windows` with WPF and must be built and validated on Windows. Preview mode depends on the native HWND supplied by Windows Screen Saver Settings.
+
+Validated on Windows with `dotnet restore`, `dotnet build -c Release`, `dotnet test`, publish/install/uninstall scripts, and short smoke launches for `/c`, `/s`, and `/p <HWND>`.
