@@ -10,7 +10,13 @@ public sealed class TimerStateCalculator
 
     public TimerSettingsFile Normalize(TimerSettingsFile? file)
     {
-        var normalized = new TimerSettingsFile { Version = 1 };
+        var normalized = new TimerSettingsFile
+        {
+            Version = 2,
+            Use12HourTime = file?.Use12HourTime ?? true,
+            ThemeMode = NormalizeThemeMode(file?.ThemeMode),
+            ColorPalette = NormalizeColorPalette(file?.ColorPalette)
+        };
         var incoming = file?.Timers ?? [];
 
         for (var index = 0; index < MaximumTimers; index++)
@@ -20,6 +26,18 @@ public sealed class TimerStateCalculator
         }
 
         return normalized;
+    }
+
+    private static ThemeMode NormalizeThemeMode(ThemeMode? value)
+    {
+        var candidate = value ?? ThemeMode.System;
+        return Enum.IsDefined(candidate) ? candidate : ThemeMode.System;
+    }
+
+    private static ColorPalette NormalizeColorPalette(ColorPalette? value)
+    {
+        var candidate = value ?? ColorPalette.Orange;
+        return Enum.IsDefined(candidate) ? candidate : ColorPalette.Orange;
     }
 
     public TimerRuntimeState Calculate(TimerDefinition timer, DateTimeOffset now)

@@ -14,6 +14,7 @@ public static class Program
             ShutdownMode = ShutdownMode.OnExplicitShutdown
         };
         app.InitializeComponent();
+        app.InitializeThemeService();
 
         try
         {

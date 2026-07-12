@@ -2,14 +2,14 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:views="clr-namespace:MujiScreenSaver.Views"
-             Background="{StaticResource PaperBrush}"
+             Background="{DynamicResource PaperBrush}"
              SnapsToDevicePixels="True"
              UseLayoutRounding="True">
     <UserControl.Resources>
         <Style x:Key="WeekDayStyle" TargetType="Border">
             <Setter Property="Width" Value="72" />
             <Setter Property="Padding" Value="0,0,0,10" />
-            <Setter Property="BorderBrush" Value="{StaticResource InkBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource InkBrush}" />
             <Setter Property="BorderThickness" Value="0" />
             <Style.Triggers>
                 <DataTrigger Binding="{Binding IsToday}" Value="True">
@@ -19,9 +19,9 @@
         </Style>
     </UserControl.Resources>
 
-    <Grid Background="{StaticResource PaperBrush}">
+    <Grid Background="{DynamicResource PaperBrush}">
         <Viewbox Stretch="Uniform">
-            <Grid Width="1600" Height="900" Margin="132,88,132,96" Background="{StaticResource PaperBrush}">
+            <Grid Width="1600" Height="900" Margin="132,88,132,96" Background="{DynamicResource PaperBrush}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="42" />
@@ -35,7 +35,7 @@
                                FontFamily="{StaticResource TextFont}"
                                FontSize="24"
                                FontWeight="SemiBold"
-                               Foreground="{StaticResource InkBrush}" />
+                               Foreground="{DynamicResource InkBrush}" />
 
                     <ItemsControl ItemsSource="{Binding WeekDays}" Margin="0,32,0,0">
                         <ItemsControl.ItemsPanel>
@@ -51,13 +51,13 @@
                                                    HorizontalAlignment="Center"
                                                    FontFamily="{StaticResource TextFont}"
                                                    FontSize="18"
-                                                   Foreground="{StaticResource MutedBrush}" />
+                                                   Foreground="{DynamicResource MutedBrush}" />
                                         <TextBlock Text="{Binding DateLabel}"
                                                    HorizontalAlignment="Center"
                                                    Margin="0,10,0,0"
                                                    FontFamily="{StaticResource TextFont}"
                                                    FontSize="24"
-                                                   Foreground="{StaticResource InkBrush}" />
+                                                   Foreground="{DynamicResource InkBrush}" />
                                     </StackPanel>
                                 </Border>
                             </DataTemplate>
@@ -71,7 +71,7 @@
                            FontFamily="{StaticResource DisplayFont}"
                            FontSize="188"
                            FontWeight="Light"
-                           Foreground="{StaticResource InkBrush}" />
+                           Foreground="{DynamicResource InkBrush}" />
 
                 <ItemsControl Grid.Row="4"
                               ItemsSource="{Binding Timers}"
@@ -94,19 +94,19 @@
                                 <TextBlock Text="{Binding Label}"
                                            FontFamily="{StaticResource TextFont}"
                                            FontSize="22"
-                                           Foreground="{StaticResource InkBrush}" />
+                                           Foreground="{DynamicResource InkBrush}" />
                                 <TextBlock Grid.Column="1"
                                            Text="{Binding RemainingText}"
                                            FontFamily="{StaticResource TextFont}"
                                            FontSize="22"
-                                           Foreground="{StaticResource InkBrush}" />
+                                           Foreground="{DynamicResource InkBrush}" />
 
                                 <views:TimerProgressBar Grid.Row="1"
                                                         Grid.ColumnSpan="2"
                                                         Height="16"
                                                         Progress="{Binding Progress}"
-                                                        TrackBrush="{StaticResource RuleBrush}"
-                                                        FillBrush="{StaticResource InkBrush}"
+                                                        TrackBrush="{DynamicResource RuleBrush}"
+                                                        FillBrush="{DynamicResource InkBrush}"
                                                         BarHeight="2" />
 
                                 <TextBlock Grid.Row="2"
@@ -114,7 +114,7 @@
                                            Text="{Binding ElapsedTotalText}"
                                            FontFamily="{StaticResource TextFont}"
                                            FontSize="14"
-                                           Foreground="{StaticResource MutedBrush}" />
+                                           Foreground="{DynamicResource MutedBrush}" />
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

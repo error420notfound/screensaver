@@ -6,8 +6,8 @@ param(
 $ErrorActionPreference = "Stop"
 $scrPath = & (Join-Path $PSScriptRoot "publish-scr.ps1") -Configuration $Configuration -Runtime $Runtime
 
-Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "SCRNSAVE.EXE" -Value $scrPath
-Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "ScreenSaveActive" -Value "1"
+New-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "SCRNSAVE.EXE" -Value $scrPath -PropertyType String -Force | Out-Null
+New-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "ScreenSaveActive" -Value "1" -PropertyType String -Force | Out-Null
 
 Write-Host "Registered current-user screensaver:"
 Write-Host $scrPath

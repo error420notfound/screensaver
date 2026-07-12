@@ -1,6 +1,7 @@
 using System.IO;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using MujiScreenSaver.Models;
 
@@ -18,7 +19,12 @@ public sealed class TimerStore
         _jsonOptions = new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            WriteIndented = true
+            WriteIndented = true,
+            Converters =
+            {
+                new LenientEnumConverter<ThemeMode>(),
+                new LenientEnumConverter<ColorPalette>()
+            }
         };
     }
 
@@ -147,5 +153,36 @@ public sealed class TimerStore
         catch
         {
         }
+    }
+}
+
+internal sealed class LenientEnumConverter<TEnum> : JsonConverter<TEnum>
+    where TEnum : struct, Enum
+{
+    public override TEnum Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType == JsonTokenType.String &&
+            Enum.TryParse<TEnum>(reader.GetString(), ignoreCase: true, out var parsed) &&
+            Enum.IsDefined(parsed))
+        {
+            return parsed;
+        }
+
+        if (reader.TokenType == JsonTokenType.Number && reader.TryGetInt32(out var numeric))
+        {
+            var numericValue = (TEnum)Enum.ToObject(typeof(TEnum), numeric);
+            if (Enum.IsDefined(numericValue))
+            {
+                return numericValue;
+            }
+        }
+
+        return default;
+    }
+
+    public override void Write(Utf8JsonWriter writer, TEnum value, JsonSerializerOptions options)
+    {
+        var normalized = Enum.IsDefined(value) ? value : default;
+        writer.WriteStringValue(normalized.ToString());
     }
 }

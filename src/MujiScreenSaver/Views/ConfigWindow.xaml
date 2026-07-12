@@ -4,37 +4,44 @@
         xmlns:views="clr-namespace:MujiScreenSaver.Views"
         Title="Muji Screen Saver"
         Width="620"
-        Height="520"
+        Height="700"
         MinWidth="560"
         MinHeight="460"
-        Background="{StaticResource PaperBrush}"
+        Background="{DynamicResource PaperBrush}"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="FontFamily" Value="{StaticResource TextFont}" />
-            <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
         </Style>
         <Style TargetType="TextBox">
             <Setter Property="FontFamily" Value="{StaticResource TextFont}" />
-            <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
-            <Setter Property="Background" Value="{StaticResource PaperBrush}" />
-            <Setter Property="BorderBrush" Value="{StaticResource RuleBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
+            <Setter Property="Background" Value="{DynamicResource PaperBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource RuleBrush}" />
             <Setter Property="BorderThickness" Value="0,0,0,1" />
             <Setter Property="Padding" Value="0,4,0,4" />
         </Style>
         <Style TargetType="Button">
             <Setter Property="FontFamily" Value="{StaticResource TextFont}" />
-            <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
-            <Setter Property="Background" Value="{StaticResource PaperBrush}" />
-            <Setter Property="BorderBrush" Value="{StaticResource RuleBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
+            <Setter Property="Background" Value="{DynamicResource PaperBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource RuleBrush}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="Padding" Value="14,7" />
             <Setter Property="Margin" Value="0,0,8,0" />
         </Style>
         <Style TargetType="CheckBox">
             <Setter Property="FontFamily" Value="{StaticResource TextFont}" />
-            <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
             <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="FontFamily" Value="{StaticResource TextFont}" />
+            <Setter Property="Foreground" Value="{DynamicResource InkBrush}" />
+            <Setter Property="Background" Value="{DynamicResource PaperBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource RuleBrush}" />
+            <Setter Property="Padding" Value="8,5" />
         </Style>
     </Window.Resources>
 
@@ -46,19 +53,64 @@
         </Grid.RowDefinitions>
 
         <StackPanel>
-            <TextBlock Text="Timers"
+            <TextBlock Text="Appearance"
                        FontSize="26"
                        FontWeight="SemiBold" />
-            <TextBlock Text="Configure up to three quiet timers for the screensaver."
-                       Margin="0,6,0,24"
+            <TextBlock Text="Choose a palette and let it follow Windows, or set a fixed mode."
+                       Margin="0,6,0,16"
                        FontSize="13"
-                       Foreground="{StaticResource MutedBrush}" />
+                       Foreground="{DynamicResource MutedBrush}" />
+            <Grid Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Mode" FontSize="11" Foreground="{DynamicResource MutedBrush}" />
+                <TextBlock Grid.Column="1" Text="Palette" FontSize="11" Foreground="{DynamicResource MutedBrush}" />
+                <ComboBox Grid.Row="1"
+                          Margin="0,4,12,0"
+                          ItemsSource="{Binding ThemeModes}"
+                          SelectedItem="{Binding ThemeMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <ComboBox Grid.Row="1"
+                          Grid.Column="1"
+                          Margin="0,4,0,0"
+                          ItemsSource="{Binding PaletteOptions}"
+                          SelectedValuePath="Value"
+                          SelectedValue="{Binding ColorPalette, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Border Width="12" Height="12" Margin="0,0,4,0" Background="{Binding LightPreviewBrush}" BorderBrush="{DynamicResource RuleBrush}" BorderThickness="1" />
+                                <Border Width="12" Height="12" Margin="0,0,8,0" Background="{Binding DarkPreviewBrush}" BorderBrush="{DynamicResource RuleBrush}" BorderThickness="1" />
+                                <TextBlock Text="{Binding DisplayName}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </Grid>
+
+            <Border BorderBrush="{DynamicResource RuleBrush}" BorderThickness="0,1,0,0" Padding="0,18,0,0">
+                <StackPanel>
+                    <TextBlock Text="Timers" FontSize="20" FontWeight="SemiBold" />
+                    <TextBlock Text="Configure up to three quiet timers for the screensaver."
+                               Margin="0,4,0,12"
+                               FontSize="13"
+                               Foreground="{DynamicResource MutedBrush}" />
+                    <CheckBox Content="Use 12-hour time"
+                              IsChecked="{Binding Use12HourTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+            </Border>
         </StackPanel>
 
         <ItemsControl Grid.Row="1" ItemsSource="{Binding Timers}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderBrush="{StaticResource RuleBrush}"
+                    <Border BorderBrush="{DynamicResource RuleBrush}"
                             BorderThickness="0,1,0,0"
                             Padding="0,18"
                             Margin="0">
@@ -78,7 +130,7 @@
                             <TextBlock Grid.Column="1"
                                        Text="{Binding StatusText}"
                                        HorizontalAlignment="Right"
-                                       Foreground="{StaticResource MutedBrush}" />
+                                       Foreground="{DynamicResource MutedBrush}" />
 
                             <TextBox Grid.Row="1"
                                      Margin="0,12,18,0"
@@ -88,7 +140,7 @@
                                         Margin="0,12,0,0">
                                 <TextBlock Text="Minutes"
                                            FontSize="11"
-                                           Foreground="{StaticResource MutedBrush}" />
+                                           Foreground="{DynamicResource MutedBrush}" />
                                 <TextBox Text="{Binding DurationMinutes, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
                             </StackPanel>
 
@@ -107,8 +159,8 @@
                                                     Margin="260,18,0,0"
                                                     HorizontalAlignment="Stretch"
                                                     Progress="{Binding Progress}"
-                                                    TrackBrush="{StaticResource RuleBrush}"
-                                                    FillBrush="{StaticResource InkBrush}"
+                                                    TrackBrush="{DynamicResource RuleBrush}"
+                                                    FillBrush="{DynamicResource InkBrush}"
                                                     BarHeight="2" />
                         </Grid>
                     </Border>
@@ -121,6 +173,6 @@
                    Margin="0,18,0,0"
                    FontSize="11"
                    TextTrimming="CharacterEllipsis"
-                   Foreground="{StaticResource MutedBrush}" />
+                   Foreground="{DynamicResource MutedBrush}" />
     </Grid>
 </Window>

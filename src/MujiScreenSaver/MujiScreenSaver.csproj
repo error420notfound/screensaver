@@ -11,4 +11,8 @@
     <RootNamespace>MujiScreenSaver</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Fonts\*.ttf" />
+  </ItemGroup>
 </Project>

@@ -5,6 +5,6 @@
         WindowStyle="None"
         ResizeMode="NoResize"
         WindowState="Normal"
-        Background="{StaticResource PaperBrush}">
+        Background="{DynamicResource PaperBrush}">
     <views:ScreenSaverView />
 </Window>

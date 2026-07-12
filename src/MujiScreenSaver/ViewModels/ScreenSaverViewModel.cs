@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Windows;
 using System.Windows.Threading;
 using MujiScreenSaver.Models;
 using MujiScreenSaver.Services;
@@ -12,6 +13,7 @@ public sealed class ScreenSaverViewModel : ViewModelBase, IDisposable
     private readonly WeekCalendarService _weekCalendar;
     private readonly TimerStore _timerStore;
     private readonly TimerStateCalculator _timerCalculator;
+    private readonly ThemeService? _themeService;
     private readonly DispatcherTimer _clockTimer;
     private readonly DispatcherTimer _reloadTimer;
     private TimerSettingsFile _settings;
@@ -24,13 +26,15 @@ public sealed class ScreenSaverViewModel : ViewModelBase, IDisposable
         ClockService clock,
         WeekCalendarService weekCalendar,
         TimerStore timerStore,
-        TimerStateCalculator timerCalculator)
+        TimerStateCalculator timerCalculator,
+        ThemeService? themeService)
     {
         IsPreview = isPreview;
         _clock = clock;
         _weekCalendar = weekCalendar;
         _timerStore = timerStore;
         _timerCalculator = timerCalculator;
+        _themeService = themeService;
         _settings = _timerStore.Load();
 
         for (var index = 0; index < 7; index++)
@@ -76,7 +80,8 @@ public sealed class ScreenSaverViewModel : ViewModelBase, IDisposable
             new ClockService(),
             new WeekCalendarService(),
             new TimerStore(calculator),
-            calculator);
+            calculator,
+            (Application.Current as App)?.ThemeService);
     }
 
     public void Start()
@@ -102,6 +107,7 @@ public sealed class ScreenSaverViewModel : ViewModelBase, IDisposable
     private void ReloadSettings()
     {
         _settings = _timerStore.Load();
+        _themeService?.Apply(_settings.ThemeMode, _settings.ColorPalette);
         RefreshFromClock();
     }
 
@@ -109,7 +115,7 @@ public sealed class ScreenSaverViewModel : ViewModelBase, IDisposable
     {
         var now = _clock.Now();
         DateText = _weekCalendar.FormatDate(now);
-        TimeText = now.LocalDateTime.ToString(IsPreview ? "HH:mm" : "HH:mm:ss", CultureInfo.InvariantCulture);
+        TimeText = FormatTime(now, _settings.Use12HourTime, IsPreview);
 
         var week = _weekCalendar.GetMondayFirstWeek(now);
         for (var index = 0; index < WeekDays.Count; index++)
@@ -124,5 +130,14 @@ public sealed class ScreenSaverViewModel : ViewModelBase, IDisposable
             var state = _timerCalculator.Calculate(_settings.Timers[index], now);
             Timers[index].Update(state);
         }
+    }
+
+    public static string FormatTime(DateTimeOffset now, bool use12HourTime, bool isPreview)
+    {
+        var format = use12HourTime
+            ? isPreview ? "h:mm tt" : "h:mm:ss tt"
+            : isPreview ? "HH:mm" : "HH:mm:ss";
+
+        return now.LocalDateTime.ToString(format, CultureInfo.InvariantCulture);
     }
 }
